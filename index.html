@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <title>Weather Star 4000+ Crotone (Permalink Edition)</title>
+  <style>
+    /* Sfondo blu profondo originale WS4000 */
+    body {
+      background-color: #041094;
+      color: #ffffff;
+      font-family: 'Courier New', monospace;
+      font-weight: bold;
+      margin: 0;
+      padding: 0;
+      width: 100vw;
+      height: 100vh;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      box-sizing: border-box;
+      border: 10px solid #041094;
+    }
+
+    /* Intestazione fissa superiore */
+    .header-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 4px solid #00fbfc; /* Linea ciano classica */
+      padding-bottom: 10px;
+    }
+
+    .title-main {
+      font-size: 36px;
+      color: #ffffff;
+      text-shadow: 3px 3px 0px #000;
+    }
+
+    .clock-display {
+      font-size: 32px;
+      color: #fffb00; /* Giallo neon WS4000 */
+      text-shadow: 3px 3px 0px #000;
+    }
+
+    /* Contenitore centrale dei dati */
+    .content-area {
+      flex-grow: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+    }
+
+    .city-name {
+      font-size: 72px;
+      color: #ffffff;
+      margin-bottom: 20px;
+      text-shadow: 4px 4px 0px #000;
+      letter-spacing: 2px;
+    }
+
+    .weather-box {
+      background: rgba(0, 0, 0, 0.25);
+      border: 3px solid #00fbfc;
+      padding: 30px 50px;
+      border-radius: 4px;
+      display: inline-block;
+      box-shadow: 5px 5px 15px rgba(0,0,0,0.5);
+    }
+
+    .data-row {
+      font-size: 32px;
+      margin: 15px 0;
+      text-align: left;
+      text-shadow: 2px 2px 0px #000;
+    }
+
+    .highlight-yellow {
+      color: #fffb00;
+    }
+
+    /* Footer fisso inferiore */
+    .footer-bar {
+      border-top: 4px solid #00fbfc;
+      padding-top: 10px;
+      text-align: center;
+      font-size: 24px;
+      color: #00fbfc;
+      text-shadow: 2px 2px 0px #000;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- PERMALINK AUDIO: Collegamento diretto fisso a uno streaming o file Smooth Jazz stabile -->
+  <audio id="bg-music" src="https://soundhelix.com" autoplay loop></audio>
+
+  <!-- Barra Superiore (Titolo + Orologio) -->
+  <div class="header-bar">
+    <div class="title-main">PREVISIONI LOCALI</div>
+    <div class="clock-display" id="live-clock">00:00:00</div>
+  </div>
+
+  <!-- Area Centrale (Dati di Crotone) -->
+  <div class="content-area">
+    <div class="city-name">CROTONE</div>
+    <div class="weather-box">
+      <div class="data-row">CONDIZIONI: <span class="highlight-yellow" id="cond-val">SERENO</span></div>
+      <div class="data-row">TEMPERATURA: <span class="highlight-yellow" id="temp-val">18°C</span></div>
+      <div class="data-row">UMIDITÀ:     <span class="highlight-yellow" id="umi-val">65%</span></div>
+      <div class="data-row">VENTO:       <span class="highlight-yellow" id="vento-val">NW 15 KM/H</span></div>
+      <div class="data-row">MAR IONIO:   <span class="highlight-yellow" id="mare-val">QUASI CALMO</span></div>
+    </div>
+  </div>
+
+  <!-- Barra Inferiore Fissa -->
+  <div class="footer-bar">
+    WEATHER STAR 4000+ INTERNATIONAL OREGON SYSTEM
+  </div>
+
+  <script>
+    // 1. Logica dell'Orologio in tempo reale (Ore, Minuti, Secondi)
+    function updateClock() {
+      const now = new Date();
+      const hours = String(now.getHours()).padStart(2, '0');
+      const minutes = String(now.getMinutes()).padStart(2, '0');
+      const seconds = String(now.getSeconds()).padStart(2, '0');
+      document.getElementById('live-clock').innerText = `${hours}:${minutes}:${seconds}`;
+    }
+    setInterval(updateClock, 1000);
+    updateClock();
+
+    // 2. Rotazione dati locali (Pre-caricati)
+    const variazioniMeteo = [
+      { cond: "SERENO", temp: "18°C", umi: "65%", vento: "NW 15 KM/H", mare: "QUASI CALMO" },
+      { cond: "POCO NUVOLOSO", temp: "17°C", umi: "68%", vento: "W 12 KM/H", mare: "CALMO" }
+    ];
+    let step = 0;
+    
+    setInterval(() => {
+      step = (step + 1) % variazioniMeteo.length;
+      const att = variazioniMeteo[step];
+      document.getElementById('cond-val').innerText = att.cond;
+      document.getElementById('temp-val').innerText = att.temp;
+      document.getElementById('umi-val').innerText = att.umi;
+      document.getElementById('vento-val').innerText = att.vento;
+      document.getElementById('mare-val').innerText = att.mare;
+    }, 15000);
+
+    /* 
+       3. OPZIONE PERMALINK PER FUTURE API (Se vorrai aggiornare in automatico via 5G)
+       Sostituisci questo blocco all'array sopra se usi un link permanente per i dati in tempo reale:
+       
+       const PERMALINK_API = "https://mwood77.github.io/ws4kp-international/?hazards-checkbox=true&current-weather-checkbox=true&latest-observations-checkbox=true&hourly-checkbox=true&hourly-graph-checkbox=true&travel-checkbox=true&regional-forecast-checkbox=true&local-forecast-checkbox=true&extended-forecast-checkbox=true&almanac-checkbox=true&radar-checkbox=true&marine-forecast-checkbox=true&aqi-forecast-checkbox=true&custom-weather-station-checkbox=true&settings-experimentalFeatures-checkbox=false&settings-hideWebamp-checkbox=false&settings-kiosk-checkbox=false&settings-scanLines-checkbox=false&settings-wide-checkbox=false&chkAutoRefresh=true&settings-windUnits-select=2.00&settings-marineWindUnits-select=1.00&settings-marineWaveHeightUnits-select=1.00&settings-temperatureUnits-select=1.00&settings-distanceUnits-select=1.00&settings-pressureUnits-select=1.00&settings-hoursFormat-select=2.00&settings-speed-select=1.00&latLonQuery=Crotone%2C+ITA&latLon=%7B%22lat%22%3A39.0806%2C%22lon%22%3A17.1271%7D";
+       async function aggiornaMeteoLive() {
+         try {
+           let response = await fetch(PERMALINK_API);
+           let data = await response.json();
+           document.getElementById('temp-val').innerText = data.current.temperature + "°C";
+           // ... aggiorna gli altri campi
+         } catch (error) {
+           console.log("Errore caricamento dati dal permalink", error);
+         }
+       }
+       setInterval(aggiornaMeteoLive, 600000); // Aggiorna ogni 10 minuti
+    */
+  </script>
+
+</body>
+</html>
